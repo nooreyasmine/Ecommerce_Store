@@ -1,167 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Commerce Store</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SwiftCart - E-Commerce Store</title>
+  <!-- Google Fonts & FontAwesome for icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <header>
-        <a href="index.html" class="logo">ShopLocal</a>
-        <nav id="nav-menu">
-            <a href="index.html">Home</a>
-        </nav>
-        <div class="header-icons">
-            <div class="cart-icon-container" id="cart-icon-btn">
-                <i class="fas fa-shopping-cart"></i>
-                <span id="cart-count">0</span>
-            </div>
-        </div>
-    </header>
-
-    <section class="hero">
-        <h1>Discover Handcrafted Goods</h1>
-        <p>Explore curated essentials designed for everyday comfort.</p>
-    </section>
-
-    <!-- Search & Filters Utility Row -->
-    <div class="storefront-utility-bar">
-        <div class="search-wrapper">
-            <i class="fas fa-search"></i>
-            <input type="text" id="search-input" placeholder="Search products...">
-        </div>
-        <div class="category-filters" id="category-filters-container">
-            <!-- Dynamically generated filters -->
-        </div>
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="#/" class="logo"><i class="fa-solid fa-bag-shopping"></i> SwiftCart</a>
+      
+      <nav class="nav-links">
+        <a href="#/"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="#/wishlist" class="nav-icon-btn">
+          <i class="fa-solid fa-heart"></i> Wishlist
+          <span id="wishlist-count" class="badge">0</span>
+        </a>
+        <a href="#/cart" class="nav-icon-btn">
+          <i class="fa-solid fa-cart-shopping"></i> Cart
+          <span id="cart-count" class="badge">0</span>
+        </a>
+        <a href="#/orders" id="nav-orders" class="hidden"><i class="fa-solid fa-box-open"></i> Orders</a>
+        <span id="user-display" class="user-status"></span>
+        <a href="#/login" id="auth-btn" class="btn btn-sm btn-outline">Login</a>
+      </nav>
     </div>
+  </header>
 
-    <main class="product-container" id="product-list">
-        <!-- Products load here -->
-    </main>
+  <!-- Main View Area (Dynamic Content loaded here) -->
+  <main id="app" class="main-content"></main>
 
-    <!-- Dynamic Product Details Overlay -->
-    <div class="modal-overlay" id="details-modal">
-        <div class="modal-content">
-            <button class="close-modal-btn" id="close-details-btn">&times;</button>
-            <div class="detail-modal-layout">
-                <img src="" id="modal-detail-img" class="detail-img" alt="">
-                <div class="detail-meta">
-                    <h2 id="modal-detail-title" style="font-size:1.8rem; color:#1a252f;"></h2>
-                    <div class="product-rating" id="modal-detail-rating"></div>
-                    <div id="modal-detail-price" style="font-size: 1.5rem; font-weight:700; color:#27ae60;"></div>
-                    
-                    <div class="detail-delivery-alert">
-                        <i class="fas fa-truck"></i>
-                        <span>Estimated Delivery: <strong id="modal-detail-delivery"></strong></span>
-                    </div>
-
-                    <p class="detail-desc" id="modal-detail-desc"></p>
-                    
-                    <div>
-                        <h4 style="margin-bottom:0.5rem; font-weight:700;">Key Features:</h4>
-                        <ul class="detail-features-list" id="modal-detail-features"></ul>
-                    </div>
-
-                    <button class="add-to-cart-btn" id="modal-detail-add-btn" style="margin-top:auto; padding:1.1rem; font-size:1rem;">Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- Similar Recommendations Bar -->
-            <div class="similar-products-section">
-                <h3>Similar Products You May Like</h3>
-                <div class="product-container" id="similar-products-grid" style="margin:0; padding:0; gap:1.5rem;">
-                    <!-- Recommendations load dynamically -->
-                </div>
-            </div>
-        </div>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <p>&copy; 2026 SwiftCart. Built for GitHub Pages.</p>
     </div>
+  </footer>
 
-    <!-- Side Shopping Cart Drawer -->
-    <div class="cart-sidebar" id="cart-sidebar">
-        <div class="cart-header">
-            <h2>Your Cart</h2>
-            <button id="close-cart-btn">&times;</button>
-        </div>
-        <div class="cart-items" id="cart-items"></div>
-        <div class="cart-total-section">
-            <h3>Total: $<span id="cart-total">0.00</span></h3>
-            <button class="checkout-btn" id="checkout-btn">Proceed to Checkout</button>
-        </div>
-    </div>
-
-    <!-- Checkout Modal with Coupon Rules -->
-    <div class="modal-overlay" id="checkout-modal">
-        <div class="modal-content">
-            <button class="close-modal-btn" id="close-modal-btn">&times;</button>
-            <h2>Secure Checkout</h2>
-            <div class="checkout-grid">
-                <form id="checkout-form">
-                    <div class="payment-methods">
-                        <label class="payment-method-label active" id="method-card">
-                            <input type="radio" name="payment-method" value="card" checked style="display:none;">
-                            <i class="fas fa-credit-card"></i> Credit Card
-                        </label>
-                        <label class="payment-method-label" id="method-paypal">
-                            <input type="radio" name="payment-method" value="paypal" style="display:none;">
-                            <i class="fab fa-paypal"></i> PayPal
-                        </label>
-                    </div>
-
-                    <div id="card-details-section">
-                        <div class="form-group">
-                            <label>Name on Card</label>
-                            <input type="text" id="card-name" required placeholder="John Doe">
-                        </div>
-                        <div class="form-group">
-                            <label>Card Number</label>
-                            <input type="text" id="card-number" required placeholder="4111 2222 3333 4444" maxlength="19">
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Expiry Date</label>
-                                <input type="text" id="card-expiry" required placeholder="MM/YY" maxlength="5">
-                            </div>
-                            <div class="form-group" style="flex:0.5;">
-                                <label>CVV</label>
-                                <input type="password" id="card-cvv" required placeholder="123" maxlength="3">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="paypal-section" style="display: none; text-align: center; padding: 2rem 0;">
-                        <i class="fab fa-paypal" style="font-size: 3rem; color: #003087; margin-bottom: 1rem;"></i>
-                        <p>Authorize your purchase securely on PayPal's system on checkout.</p>
-                    </div>
-
-                    <div class="coupon-row">
-                        <input type="text" id="coupon-input" placeholder="Promo Code (SAVE10)">
-                        <button type="button" id="apply-coupon-btn">Apply</button>
-                    </div>
-
-                    <button type="submit" class="checkout-btn" id="pay-now-btn">Pay & Place Order</button>
-                </form>
-
-                <div class="checkout-summary">
-                    <div>
-                        <h3>Order Summary</h3>
-                        <div id="summary-items"></div>
-                    </div>
-                    <div class="summary-total">
-                        <span>Total:</span>
-                        <span>$<span id="summary-price">0.00</span></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <footer>
-        <p>&copy; 2026 ShopLocal. All rights reserved.</p>
-    </footer>
-
-    <script src="script.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
