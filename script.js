@@ -366,6 +366,151 @@ function renderProfilePage() {
         }
     }
 }
+// --- Interactive Checkout Modal Operations ---
+const checkoutModal = document.getElementById('checkout-modal');
+const closeModalBtn = document.getElementById('close-modal-btn');
+const checkoutForm = document.getElementById('checkout-form');
+const cardDetailsSection = document.getElementById('card-details-section');
+const paypalSection = document.getElementById('paypal-section');
+const payNowBtn = document.getElementById('pay-now-btn');
+
+const methodCardBtn = document.getElementById('method-card');
+const methodPaypalBtn = document.getElementById('method-paypal');
+
+// Trigger open checkout panel
+if (checkoutBtn) {
+    checkoutBtn.addEventListener('click', () => {
+        if (cart.length === 0) {
+            alert("Your shopping cart is empty!");
+            return;
+        }
+
+        if (!currentUser) {
+            alert("You must log in or sign up to complete your purchase.");
+            window.location.href = "auth.html";
+            return;
+        }
+
+        // Close sidebar and open Checkout screen
+        if (cartSidebar) cartSidebar.classList.remove('open');
+        setTimeout(() => cartSidebar.style.display = 'none', 300);
+        
+        checkoutModal.classList.add('open');
+        renderCheckoutSummary();
+    });
+}
+
+// Close checkout modal
+if (closeModalBtn) {
+    closeModalBtn.addEventListener('click', () => {
+        checkoutModal.classList.remove('open');
+    });
+}
+
+// Toggle Payment Tabs
+if (methodCardBtn && methodPaypalBtn) {
+    methodCardBtn.addEventListener('click', () => {
+        methodCardBtn.classList.add('active');
+        methodPaypalBtn.classList.remove('active');
+        cardDetailsSection.style.display = 'block';
+        paypalSection.style.display = 'none';
+        payNowBtn.textContent = "Pay & Place Order";
+        toggleCardInputsRequired(true);
+    });
+
+    methodPaypalBtn.addEventListener('click', () => {
+        methodPaypalBtn.classList.add('active');
+        methodCardBtn.classList.remove('active');
+        cardDetailsSection.style.display = 'none';
+        paypalSection.style.display = 'block';
+        payNowBtn.textContent = "Proceed to PayPal";
+        toggleCardInputsRequired(false);
+    });
+}
+
+function toggleCardInputsRequired(isRequired) {
+    document.getElementById('card-name').required = isRequired;
+    document.getElementById('card-number').required = isRequired;
+    document.getElementById('card-expiry').required = isRequired;
+    document.getElementById('card-cvv').required = isRequired;
+}
+
+// Live card input formatting (adds spaces to card number and slash to expiry)
+const cardNumberInput = document.getElementById('card-number');
+if (cardNumberInput) {
+    cardNumberInput.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+        value = value.match(/.{1,4}/g)?.join(' ') || value;
+        e.target.value = value;
+    });
+}
+
+const cardExpiryInput = document.getElementById('card-expiry');
+if (cardExpiryInput) {
+    cardExpiryInput.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 2) {
+            value = value.substring(0, 2) + '/' + value.substring(2, 4);
+        }
+        e.target.value = value;
+    });
+}
+
+// Render dynamic items in summary box
+function renderCheckoutSummary() {
+    const summaryItems = document.getElementById('summary-items');
+    const summaryPrice = document.getElementById('summary-price');
+    if (!summaryItems || !summaryPrice) return;
+
+    summaryItems.innerHTML = '';
+    cart.forEach(item => {
+        const row = document.createElement('div');
+        row.classList.add('summary-item-row');
+        row.innerHTML = `
+            <span>${item.name} x${item.quantity}</span>
+            <span>$${(item.price * item.quantity).toFixed(2)}</span>
+        `;
+        summaryItems.appendChild(row);
+    });
+
+    const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    summaryPrice.textContent = totalPrice.toFixed(2);
+}
+
+// Handle Form Submission and process order
+if (checkoutForm) {
+    checkoutForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        // 1. Process Order object values
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        
+        const newOrder = {
+            id: 'ORD-' + Math.floor(100000 + Math.random() * 900000),
+            date: new Date().toLocaleDateString(),
+            itemCount: totalItems,
+            total: totalPrice.toFixed(2),
+            status: "Processing"
+        };
+
+        // 2. Append order to profile database
+        if (!currentUser.orders) {
+            currentUser.orders = [];
+        }
+        currentUser.orders.push(newOrder);
+        saveUserData();
+
+        // 3. Clear cart
+        cart = [];
+        updateCart();
+
+        // 4. Notify and redirect
+        checkoutModal.classList.remove('open');
+        alert("Transaction Approved! Your simulated order has been securely processed and added to your Dashboard history.");
+        window.location.href = "profile.html";
+    });
+}
 
 // --- App Bootstrap ---
 updateNavigation();
