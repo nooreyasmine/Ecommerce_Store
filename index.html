@@ -44,6 +44,73 @@
             <button class="checkout-btn" id="checkout-btn">Proceed to Checkout</button>
         </div>
     </div>
+    <!-- Checkout Modal -->
+    <div class="modal-overlay" id="checkout-modal">
+        <div class="modal-content">
+            <button class="close-modal-btn" id="close-modal-btn">&times;</button>
+            <h2>Secure Checkout</h2>
+            
+            <div class="checkout-grid">
+                <!-- Left: Payment Form -->
+                <form id="checkout-form">
+                    <div class="payment-methods">
+                        <label class="payment-method-label active" id="method-card">
+                            <input type="radio" name="payment-method" value="card" checked style="display:none;">
+                            <i class="fas fa-credit-card"></i> Credit Card
+                        </label>
+                        <label class="payment-method-label" id="method-paypal">
+                            <input type="radio" name="payment-method" value="paypal" style="display:none;">
+                            <i class="fab fa-paypal"></i> PayPal
+                        </label>
+                    </div>
+
+                    <!-- Credit Card Input Section -->
+                    <div id="card-details-section">
+                        <div class="form-group">
+                            <label for="card-name">Name on Card</label>
+                            <input type="text" id="card-name" required placeholder="John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label for="card-number">Card Number</label>
+                            <input type="text" id="card-number" required placeholder="4111 2222 3333 4444" maxlength="19">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="card-expiry">Expiry Date</label>
+                                <input type="text" id="card-expiry" required placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="form-group" style="flex: 0.5;">
+                                <label for="card-cvv">CVV</label>
+                                <input type="password" id="card-cvv" required placeholder="123" maxlength="3">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PayPal Information Section -->
+                    <div id="paypal-section" style="display: none; text-align: center; padding: 2rem 0;">
+                        <i class="fab fa-paypal" style="font-size: 3rem; color: #003087; margin-bottom: 1rem;"></i>
+                        <p>You will be redirected to PayPal to authorize your purchase securely.</p>
+                    </div>
+
+                    <button type="submit" class="checkout-btn" id="pay-now-btn">Pay & Place Order</button>
+                </form>
+
+                <!-- Right: Order Summary Preview -->
+                <div class="checkout-summary">
+                    <div>
+                        <h3>Order Summary</h3>
+                        <div id="summary-items">
+                            <!-- Items dynamically loaded by JS -->
+                        </div>
+                    </div>
+                    <div class="summary-total">
+                        <span>Total:</span>
+                        <span>$<span id="summary-price">0.00</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <footer>
         <p>&copy; 2026 ShopLocal. All rights reserved.</p>
