@@ -13,7 +13,6 @@
         <a href="index.html" class="logo">ShopLocal</a>
         <nav id="nav-menu">
             <a href="index.html">Home</a>
-            <!-- Dynamic links injected via JS -->
         </nav>
         <div class="header-icons">
             <div class="cart-icon-container" id="cart-icon-btn">
@@ -28,9 +27,57 @@
         <p>Explore curated essentials designed for everyday comfort.</p>
     </section>
 
+    <!-- Search & Filters Utility Row -->
+    <div class="storefront-utility-bar">
+        <div class="search-wrapper">
+            <i class="fas fa-search"></i>
+            <input type="text" id="search-input" placeholder="Search products...">
+        </div>
+        <div class="category-filters" id="category-filters-container">
+            <!-- Dynamically generated filters -->
+        </div>
+    </div>
+
     <main class="product-container" id="product-list">
-        <!-- Products load dynamically with cart and wishlist logic -->
+        <!-- Products load here -->
     </main>
+
+    <!-- Dynamic Product Details Overlay -->
+    <div class="modal-overlay" id="details-modal">
+        <div class="modal-content">
+            <button class="close-modal-btn" id="close-details-btn">&times;</button>
+            <div class="detail-modal-layout">
+                <img src="" id="modal-detail-img" class="detail-img" alt="">
+                <div class="detail-meta">
+                    <h2 id="modal-detail-title" style="font-size:1.8rem; color:#1a252f;"></h2>
+                    <div class="product-rating" id="modal-detail-rating"></div>
+                    <div id="modal-detail-price" style="font-size: 1.5rem; font-weight:700; color:#27ae60;"></div>
+                    
+                    <div class="detail-delivery-alert">
+                        <i class="fas fa-truck"></i>
+                        <span>Estimated Delivery: <strong id="modal-detail-delivery"></strong></span>
+                    </div>
+
+                    <p class="detail-desc" id="modal-detail-desc"></p>
+                    
+                    <div>
+                        <h4 style="margin-bottom:0.5rem; font-weight:700;">Key Features:</h4>
+                        <ul class="detail-features-list" id="modal-detail-features"></ul>
+                    </div>
+
+                    <button class="add-to-cart-btn" id="modal-detail-add-btn" style="margin-top:auto; padding:1.1rem; font-size:1rem;">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Similar Recommendations Bar -->
+            <div class="similar-products-section">
+                <h3>Similar Products You May Like</h3>
+                <div class="product-container" id="similar-products-grid" style="margin:0; padding:0; gap:1.5rem;">
+                    <!-- Recommendations load dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Side Shopping Cart Drawer -->
     <div class="cart-sidebar" id="cart-sidebar">
@@ -44,14 +91,13 @@
             <button class="checkout-btn" id="checkout-btn">Proceed to Checkout</button>
         </div>
     </div>
-    <!-- Checkout Modal -->
+
+    <!-- Checkout Modal with Coupon Rules -->
     <div class="modal-overlay" id="checkout-modal">
         <div class="modal-content">
             <button class="close-modal-btn" id="close-modal-btn">&times;</button>
             <h2>Secure Checkout</h2>
-            
             <div class="checkout-grid">
-                <!-- Left: Payment Form -->
                 <form id="checkout-form">
                     <div class="payment-methods">
                         <label class="payment-method-label active" id="method-card">
@@ -64,44 +110,44 @@
                         </label>
                     </div>
 
-                    <!-- Credit Card Input Section -->
                     <div id="card-details-section">
                         <div class="form-group">
-                            <label for="card-name">Name on Card</label>
+                            <label>Name on Card</label>
                             <input type="text" id="card-name" required placeholder="John Doe">
                         </div>
                         <div class="form-group">
-                            <label for="card-number">Card Number</label>
+                            <label>Card Number</label>
                             <input type="text" id="card-number" required placeholder="4111 2222 3333 4444" maxlength="19">
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="card-expiry">Expiry Date</label>
+                                <label>Expiry Date</label>
                                 <input type="text" id="card-expiry" required placeholder="MM/YY" maxlength="5">
                             </div>
-                            <div class="form-group" style="flex: 0.5;">
-                                <label for="card-cvv">CVV</label>
+                            <div class="form-group" style="flex:0.5;">
+                                <label>CVV</label>
                                 <input type="password" id="card-cvv" required placeholder="123" maxlength="3">
                             </div>
                         </div>
                     </div>
 
-                    <!-- PayPal Information Section -->
                     <div id="paypal-section" style="display: none; text-align: center; padding: 2rem 0;">
                         <i class="fab fa-paypal" style="font-size: 3rem; color: #003087; margin-bottom: 1rem;"></i>
-                        <p>You will be redirected to PayPal to authorize your purchase securely.</p>
+                        <p>Authorize your purchase securely on PayPal's system on checkout.</p>
+                    </div>
+
+                    <div class="coupon-row">
+                        <input type="text" id="coupon-input" placeholder="Promo Code (SAVE10)">
+                        <button type="button" id="apply-coupon-btn">Apply</button>
                     </div>
 
                     <button type="submit" class="checkout-btn" id="pay-now-btn">Pay & Place Order</button>
                 </form>
 
-                <!-- Right: Order Summary Preview -->
                 <div class="checkout-summary">
                     <div>
                         <h3>Order Summary</h3>
-                        <div id="summary-items">
-                            <!-- Items dynamically loaded by JS -->
-                        </div>
+                        <div id="summary-items"></div>
                     </div>
                     <div class="summary-total">
                         <span>Total:</span>
